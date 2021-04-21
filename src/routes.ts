@@ -1,10 +1,15 @@
-import express from 'express'
+import { Router } from 'express'
+import { SettingControllers } from './app/controllers/SettingsController'
 
-const router = express.Router()
+const settingsController = new SettingControllers()
+
+const routes = Router()
 
 //default
-router.get('/', (req, res) => {
-  res.json({ version: '1.0.0' })
+routes.get('/', (req, res) => {
+    res.json({ version: '1.0.0' })
 })
 
-module.exports = router
+routes.post('/settings', settingsController.create)
+
+export { routes }
