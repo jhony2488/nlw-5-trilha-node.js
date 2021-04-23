@@ -1,8 +1,6 @@
 import { getCustomRepository, Repository } from 'typeorm'
 import { MessageRepository } from '../repositories/MessageRepository'
 import { UserRepository } from '../repositories/UserRepository'
-import { Message } from '../entities/Message'
-import { User } from '../entities/User'
 
 interface InterfaceMessagesServiceCreate {
     user_id: string

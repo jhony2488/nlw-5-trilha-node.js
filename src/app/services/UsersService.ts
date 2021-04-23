@@ -1,6 +1,5 @@
 import { getCustomRepository, Repository } from 'typeorm'
 import { UserRepository } from '../repositories/UserRepository'
-import { User } from '../entities/User'
 
 interface InterfaceUsersService {
     email: string

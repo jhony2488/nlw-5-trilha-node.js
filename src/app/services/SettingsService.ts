@@ -1,6 +1,5 @@
 import { getCustomRepository, Repository } from 'typeorm'
 import { SettingRepository } from '../repositories/SettingRepository'
-import { Setting } from '../entities/Setting'
 
 interface InterfaceSettingsService {
     chat: boolean
