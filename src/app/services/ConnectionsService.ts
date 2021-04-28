@@ -22,14 +22,8 @@ class ConnectionsService {
         const userAlreadyExists = await userRepository.findOne({
             id: user_id,
         })
-        const userAdminAlreadyExists = await userRepository.findOne({
-            id: admin_id,
-        })
         if (!userAlreadyExists) {
             throw new Error('User not exists!')
-        }
-        if (!userAdminAlreadyExists) {
-            throw new Error('User Admin not exists!')
         }
         const connection = await connectionRepository.create({
             user_id,
@@ -37,6 +31,15 @@ class ConnectionsService {
             socket_id,
         })
         await connectionRepository.save(connection)
+
+        return connection
+    }
+    async findByUserId(user_id: string) {
+        const connectionRepository = await getCustomRepository(
+            ConnectionRepository
+        )
+
+        const connection = await connectionRepository.findOne({ user_id })
 
         return connection
     }
