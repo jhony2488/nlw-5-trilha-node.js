@@ -1,4 +1,4 @@
-import { getCustomRepository, Repository } from 'typeorm'
+import { getCustomRepository } from 'typeorm'
 import { UserRepository } from '../repositories/UserRepository'
 
 interface InterfaceUsersService {
@@ -6,20 +6,29 @@ interface InterfaceUsersService {
 }
 
 class UsersService {
-
     async create({ email }: InterfaceUsersService) {
-        const usersRepository = getCustomRepository(UserRepository)
+        const usersRepository = await getCustomRepository(UserRepository)
 
         const userAlreadyExists = await usersRepository.findOne({
             email,
         })
-        if (userAlreadyExists) {
-            return userAlreadyExists
+        if (!userAlreadyExists) {
+            const user = await usersRepository.create({
+                email,
+            })
+            await usersRepository.save(user)
+
+            return user
         }
-        const user = await usersRepository.create({
+        return userAlreadyExists
+    }
+
+    async findByEmail({ email }: InterfaceUsersService) {
+        const usersRepository = await getCustomRepository(UserRepository)
+
+        const user = await usersRepository.findOne({
             email,
         })
-        await usersRepository.save(user)
 
         return user
     }
