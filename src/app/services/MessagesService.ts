@@ -12,9 +12,13 @@ interface InterfaceMessagesServiceIndex {
 }
 
 class MessagesService {
-    async create({ user_id, admin_id, text }: InterfaceMessagesServiceCreate) {
-        const userRepository =await getCustomRepository(UserRepository)
-        const messagesRepository =await getCustomRepository(MessageRepository)
+    async create({
+        user_id,
+        text,
+        admin_id = null,
+    }: InterfaceMessagesServiceCreate) {
+        const userRepository = await getCustomRepository(UserRepository)
+        const messagesRepository = await getCustomRepository(MessageRepository)
 
         const userAlreadyExists = await userRepository.findOne({
             id: user_id,
@@ -33,7 +37,7 @@ class MessagesService {
     }
 
     async index({ user_id }: InterfaceMessagesServiceIndex) {
-        const messagesRepository =await getCustomRepository(MessageRepository)
+        const messagesRepository = await getCustomRepository(MessageRepository)
         const messages = await messagesRepository.find({
             where: { user_id },
             relations: ['user'],

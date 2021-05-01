@@ -1,4 +1,5 @@
 import { getCustomRepository, Repository } from 'typeorm'
+import { Setting } from '../entities/Setting'
 import { SettingRepository } from '../repositories/SettingRepository'
 
 interface InterfaceSettingsService {
@@ -8,8 +9,7 @@ interface InterfaceSettingsService {
 
 class SettingsService {
     async create({ chat, username }: InterfaceSettingsService) {
-        const settingsRepository = getCustomRepository(SettingRepository)
-
+        const settingsRepository = await getCustomRepository(SettingRepository)
         const userAlreadyExists = await settingsRepository.findOne({
             username,
         })
@@ -21,6 +21,28 @@ class SettingsService {
             username,
         })
         await settingsRepository.save(settings)
+
+        return settings
+    }
+
+    async findByUserName(username: string) {
+        const settingsRepository = await getCustomRepository(SettingRepository)
+        const settings = await settingsRepository.findOne({
+            username,
+        })
+
+        return settings
+    }
+    async update(username: string, chat: boolean) {
+        const settingsRepository = await getCustomRepository(SettingRepository)
+        const settings = await settingsRepository
+            .createQueryBuilder()
+            .update(Setting)
+            .set({ chat })
+            .where('username= :username', {
+                username,
+            })
+            .execute()
 
         return settings
     }
